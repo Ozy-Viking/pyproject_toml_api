@@ -55,6 +55,7 @@ def fetch_version(
         temp_folder = pyproject_folder
         temp_path = "../" * idx
         temp_folder = temp_folder.joinpath(temp_path).resolve()
+        print(f"Checking: {temp_folder}")
         files = temp_folder.glob(filename)
         try:
             pyproject_toml = next(files)
