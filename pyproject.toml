@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "pyproject-toml-api"
+version = "0.1.0"
+description = ""
+authors = ["Zack Hankin <zthankin@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "pyproject_toml_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+# Extras for docs
+sphinx = { version = "^5.3", optional = true }
+myst-parser = { version = "^0.18", optional = true }
+sphinx-rtd-theme = { version = "^1.2.0", optional = true }
+
+# Extras for development
+mypy = { version = "^1.0.1", optional = true }
+tox = { version = "^4.4.6", optional = true }
+pytest = { version = "^7.2.1", optional = true }
+semantic-version = "^2.10.0"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+pytest-sugar = "^0.9.6"
+mypy = "^1.0.1"
+
+[tool.poetry.extras]
+docs = ['sphinx', 'myst-parser', 'sphinx-rtd-theme']
+dev = ['mypy', 'tox', 'pytest']
+
+#[tool.poetry.scripts]
+#square = "template_package:main"
+
+[tool.mypy]
+mypy_path = '$MYPY_CONFIG_FILE_DIR'
+files = '$MYPY_CONFIG_FILE_DIR/pyproject_toml_api'
+explicit_package_bases = false
+ignore_missing_imports = true
+exclude = [
+    "docs/",
+    ".venv/",
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
