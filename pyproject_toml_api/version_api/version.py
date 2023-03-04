@@ -17,7 +17,7 @@ from semantic_version import Version
 
 
 def fetch_version(
-    max_folders_up: int = 3,
+    max_folders_up: int = 10,
     pyproject_folder: Optional[Path] = None,
     default_version: str = "0.1.0",
 ) -> Version:
@@ -50,10 +50,11 @@ def fetch_version(
     ret_release: Version = Version(default_version)
 
     for idx in range(max_folders_up + 1):
-        temp_path = "../" * idx + "pyproject.toml"
-        pyproject_toml = pyproject_folder.joinpath(temp_path).resolve()
-        print(pyproject_toml)
-        if pyproject_toml.is_file():
+        temp_folder = pyproject_folder
+        temp_path = "../" * idx + "./pyproject.toml"
+        temp_toml: Path = temp_folder.joinpath(temp_path).resolve()
+        if temp_toml.is_file():
+            pyproject_toml = temp_toml
             break
     else:
         raise FileNotFoundError("pyproject.toml not found")
