@@ -20,7 +20,7 @@ def fetch_version(
     max_folders_up: int = 10,
     pyproject_folder: Optional[Path] = None,
     default_version: str = "0.1.0",
-    filename: str = "**/**/pyproject.toml",
+    filename: str = "**/pyproject.toml",
 ) -> Version:
     """
     Fetches the version number for the pyproject.toml
@@ -60,19 +60,13 @@ def fetch_version(
         files = temp_folder.glob(filename)
         try:
             pyproject_toml = next(files)
+            print(pyproject_toml)
             break
         except StopIteration:
             continue
     else:
-        rtd = Path(
-            "/home/docs/checkouts/readthedocs.org"
-            "/user_builds/pyproject-toml-api/pyproject.toml"
-        )
-        if rtd.is_file():
-            pyproject_toml = rtd
-        else:
-            msg = f"pyproject.toml not found. Started with {pyproject_folder}"
-            raise FileNotFoundError(msg)
+        msg = f"pyproject.toml not found. Started with {pyproject_folder}"
+        raise FileNotFoundError(msg)
 
     with open(pyproject_toml, "r") as fin:
         for line in fin.readlines():
