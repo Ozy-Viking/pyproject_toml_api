@@ -18,7 +18,7 @@ from semantic_version import Version
 
 def fetch_version(
     max_folders_up: int = 3,
-    pyproject_folder: Optional[str | Path] = None,
+    pyproject_folder: Optional[Path] = None,
     default_version: str = "0.1.0",
 ) -> Version:
     """
