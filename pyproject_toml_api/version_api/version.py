@@ -10,7 +10,7 @@ Started: 3/03/2023
 from __future__ import annotations
 
 import re
-from pathlib import Path
+from pathlib import Path, PurePath
 from typing import Optional
 
 from semantic_version import Version
@@ -39,7 +39,7 @@ def fetch_version(
 
     if pyproject_folder is None:
         pyproject_folder = Path(__file__).joinpath("../").resolve()
-    elif isinstance(pyproject_folder, str | Path):
+    elif isinstance(pyproject_folder, str | PurePath):
         pyproject_folder = Path(pyproject_folder)
     else:
         msg: str = (

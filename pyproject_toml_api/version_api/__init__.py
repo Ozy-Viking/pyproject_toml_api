@@ -7,12 +7,8 @@ Author: Zack Hankin
 
 Started: 4/03/2023
 """
-from __future__ import annotations
+from .version import fetch_version
 
-
-def main() -> int:
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+__all__: list[str] = [
+    "fetch_version",
+]
