@@ -59,7 +59,8 @@ def fetch_version(
             pyproject_toml = temp_toml
             break
     else:
-        raise FileNotFoundError("pyproject.toml not found")
+        msg = f"pyproject.toml not found. Started with {pyproject_folder}"
+        raise FileNotFoundError(msg)
 
     with open(pyproject_toml, "r") as fin:
         for line in fin.readlines():
