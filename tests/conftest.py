@@ -5,4 +5,4 @@ import pytest
 
 @pytest.fixture
 def testing_folder():
-    return Path(__file__).joinpath("../../testing").resolve()
+    return Path("testing").resolve()
