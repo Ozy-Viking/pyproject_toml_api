@@ -1,7 +1,7 @@
-pyproject_toml_api
+API
 ==================
 
 .. toctree::
    :maxdepth: 4
 
-   version_api
+   pyproject_toml_api
