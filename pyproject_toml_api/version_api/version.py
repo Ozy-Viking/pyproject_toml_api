@@ -39,7 +39,9 @@ def fetch_version(
 
     if pyproject_folder is None:
         pyproject_folder = Path(__file__).joinpath("../").resolve()
-    elif isinstance(pyproject_folder, str | PurePath):
+    elif isinstance(pyproject_folder, str):
+        pyproject_folder = Path(pyproject_folder)
+    elif isinstance(pyproject_folder, PurePath):
         pyproject_folder = Path(pyproject_folder)
     else:
         msg: str = (
