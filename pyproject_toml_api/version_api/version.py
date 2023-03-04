@@ -20,12 +20,14 @@ def fetch_version(
     max_folders_up: int = 10,
     pyproject_folder: Optional[Path] = None,
     default_version: str = "0.1.0",
+    filename: str = "**/pyproject.toml",
 ) -> Version:
     """
     Fetches the version number for the pyproject.toml
     folder no more than 2 up.
 
     Args:
+        filename ():
         pyproject_folder (Optional[str | Path]): Set the path if known.
         max_folders_up (int): Max number of folders up to search.
                               0 is the given folder.
@@ -36,7 +38,6 @@ def fetch_version(
         str: Release and Version number for project,
              using the semantic version style. E.g. "0.1.1"
     """
-
     if pyproject_folder is None:
         pyproject_folder = Path(__file__).joinpath("../").resolve()
     elif isinstance(pyproject_folder, str):
@@ -53,13 +54,19 @@ def fetch_version(
 
     for idx in range(max_folders_up + 1):
         temp_folder = pyproject_folder
-        temp_path = "../" * idx + "./pyproject.toml"
-        temp_toml: Path = temp_folder.joinpath(temp_path).resolve()
-        if temp_toml.is_file():
-            pyproject_toml = temp_toml
+        temp_path = "../" * idx
+        temp_folder = temp_folder.joinpath(temp_path).resolve()
+        print(f"Checking: {temp_folder}")
+        files = temp_folder.glob(filename)
+        try:
+            pyproject_toml = next(files)
+            print(pyproject_toml)
             break
+        except StopIteration:
+            continue
     else:
-        raise FileNotFoundError("pyproject.toml not found")
+        msg = f"pyproject.toml not found. Started with {pyproject_folder}"
+        raise FileNotFoundError(msg)
 
     with open(pyproject_toml, "r") as fin:
         for line in fin.readlines():

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyproject-toml-api"
-version = "0.1.1a0"
+version = "0.1.1"
 description = ""
 authors = ["Zack Hankin <zthankin@gmail.com>"]
 license = "MIT"
