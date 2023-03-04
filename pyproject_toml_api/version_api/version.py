@@ -27,6 +27,7 @@ def fetch_version(
     folder no more than 2 up.
 
     Args:
+        filename ():
         pyproject_folder (Optional[str | Path]): Set the path if known.
         max_folders_up (int): Max number of folders up to search.
                               0 is the given folder.
@@ -63,8 +64,15 @@ def fetch_version(
         except StopIteration:
             continue
     else:
-        msg = f"pyproject.toml not found. Started with {pyproject_folder}"
-        raise FileNotFoundError(msg)
+        rtd = Path(
+            "/home/docs/checkouts/readthedocs.org"
+            "/user_builds/pyproject-toml-api/pyproject.toml"
+        )
+        if rtd.is_file():
+            pyproject_toml = rtd
+        else:
+            msg = f"pyproject.toml not found. Started with {pyproject_folder}"
+            raise FileNotFoundError(msg)
 
     with open(pyproject_toml, "r") as fin:
         for line in fin.readlines():
