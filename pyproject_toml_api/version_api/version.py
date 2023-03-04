@@ -36,7 +36,7 @@ def fetch_version(
         str: Release and Version number for project,
              using the semantic version style. E.g. "0.1.1"
     """
-
+    print(__file__)
     if pyproject_folder is None:
         pyproject_folder = Path(__file__).joinpath("../").resolve()
     elif isinstance(pyproject_folder, str):
@@ -55,6 +55,7 @@ def fetch_version(
         temp_folder = pyproject_folder
         temp_path = "../" * idx + "./pyproject.toml"
         temp_toml: Path = temp_folder.joinpath(temp_path).resolve()
+        print(temp_toml)
         if temp_toml.is_file():
             pyproject_toml = temp_toml
             break
