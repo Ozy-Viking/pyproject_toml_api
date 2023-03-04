@@ -20,7 +20,7 @@ def fetch_version(
     max_folders_up: int = 10,
     pyproject_folder: Optional[Path] = None,
     default_version: str = "0.1.0",
-    filename: str = "pyproject.toml",
+    filename: str = "**/**/pyproject.toml",
 ) -> Version:
     """
     Fetches the version number for the pyproject.toml
