@@ -279,35 +279,51 @@ class Version:
         self.version = version if version else fetch_version()
 
     @property
+    def epoch(self) -> str:
+        return self.__dict__["epoch"]
+
+    @property
     def major(self) -> str:
-        print("prop")
         return self.__dict__["major"]
 
     @property
     def minor(self) -> str:
-        raise NotImplementedError
+        return self.__dict__["minor"]
 
     @property
     def patch(self) -> str:
-        raise NotImplementedError
+        return self.__dict__["patch"]
 
     @property
     def prerelease(self) -> Optional[str]:
-        raise NotImplementedError
+        return f'{self.__dict__["pre_l"]}{self.__dict__["pre_n"]}'
 
     @property
     def postrelease(self) -> Optional[str]:
-        raise NotImplementedError
+        if self.__dict__["post_n1"] is not None:
+            return self.__dict__["post_n1"]
+        if (
+            self.__dict__["post_l"] is None  # fmt: ignore
+            or self.__dict__["post_n2"] is None  # fmt: ignore
+        ):
+            return None
+        return f'{self.__dict__["post_l"]}{self.__dict__["post_n2"]}'
 
     @property
     def developmentrelease(self) -> Optional[str]:
-        raise NotImplementedError
+        return f'{self.__dict__["dev_l"]}{self.__dict__["dev_n"]}'
 
     @property
     def localversion(self) -> Optional[str]:
-        raise NotImplementedError
+        return f'{self.__dict__["local_l"]}.{self.__dict__["local_n"]}'
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
+        """
+        Version string.
+
+        Returns:
+            str: Version string i.e. '1!1.3c4.dev3'
+        """
         version_dict = {
             key: value
             for (key, value) in self.__dict__.items()  # fmt: ignore
@@ -315,8 +331,25 @@ class Version:
         }
         return construct_valid_version_from_dict(version_dict)
 
+    def __repr__(self) -> str:
+        """
+        Return the representation of the object.
 
-ic(Version("v1!1.3.C4.DEV3"))
+        Returns:
+            str: Representation of the object i.e. Version("1!1.3c4.dev3")
+        """
+        return f'{type(self).__name__}("{str(self)}")'
+
+
+checker = Version("v1!1.3.785C4.rev3.DEV9+WINDOWS-34")
+ic(checker.epoch)
+ic(checker.major)
+ic(checker.minor)
+ic(checker.patch)
+ic(checker.prerelease)
+ic(checker.postrelease)
+ic(checker.developmentrelease)
+ic(checker.localversion)
 
 
 def fetch_version(
