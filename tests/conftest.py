@@ -15,5 +15,5 @@ def testing_folder():
             testing_dir = temp_dir
             break
     else:
-        testing_dir = None
+        return None
     return testing_dir
