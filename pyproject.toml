@@ -10,11 +10,14 @@ packages = [{include = "pyproject_toml_api"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 semantic-version = "^2.10.0"
+tomli = "^2.0.1"
+tomli-w = "^1.0.0"
 
 # Extras for docs
 sphinx = { version = "^5.3", optional = true }
 myst-parser = { version = "^0.18", optional = true }
 sphinx-rtd-theme = { version = "^1.2.0", optional = true }
+icecream = "^2.1.3"
 
 [tool.poetry.group.dev]
 optional = true
@@ -37,6 +40,7 @@ mypy_path = '$MYPY_CONFIG_FILE_DIR'
 files = '$MYPY_CONFIG_FILE_DIR/pyproject_toml_api'
 explicit_package_bases = false
 ignore_missing_imports = true
+check_untyped_defs = true
 exclude = [
     "docs/",
     ".venv/",
