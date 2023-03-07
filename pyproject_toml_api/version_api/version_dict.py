@@ -13,7 +13,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Optional
 
-from version_api.version_util import (
+from pyproject_toml_api.version_api.version_util import (
     VERSION_DOTTED_SEGMENT,
     VERSION_IMPLICIT_KEYS,
     VERSION_INT_KEYS,
@@ -72,11 +72,12 @@ class VersionDict:
         Raises:
             VersionSyntaxError: When a non-valid version is passed in.
         """
-        version_match: Optional[re.Match] = VERSION_REGEX.match(version)
-        ret_version: dict[str, str]
+
         if version is None:
-            ret_version = VERSION_REGEX.match(default_version).groupdict()
-        elif version.casefold() == "v":
+            version = default_version
+        version_match = VERSION_REGEX.match(version)
+        ret_version: dict[str, str]
+        if version.casefold() == "v":
             version_match = VERSION_REGEX.match("v" + default_version)
             if version_match is not None:
                 ret_version = version_match.groupdict()

@@ -5,12 +5,12 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-from pyproject_toml_api.version_api import fetch_version
+from pyproject_toml_api.version_api.version import Version
 
 project = "pyproject.toml API"
 copyright = "2023, Zack Hankin <zthankin@gmail.com>"
 author = "Zack Hankin <zthankin@gmail.com>"
-release = str(fetch_version())
+release = str(Version.find())
 version = release
 
 # -- General configuration ---------------------------------------------------
