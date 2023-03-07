@@ -54,18 +54,15 @@ class SemanticVersion:
 
 class Version:
     """
-    Version
+    Project Version that is compliant with PEP440.
     """
 
     __slots__: tuple[str, ...] = ("_version_dict", "_version")
     version = SemanticVersion()
 
     def __init__(self, version: Optional[str] = None) -> None:
-        # self._version = SemanticVersion()
+        # noinspection PyUnresolvedReferences,PyDunderSlots
         self.version = VersionDict() if version is None else version
-
-    def semantic(self):
-        ...
 
     @property
     def epoch(self) -> Optional[str]:
@@ -88,7 +85,7 @@ class Version:
         return f"{self.version.pre_l}{self.version.pre_n}"
 
     @property
-    def postrelease(self) -> Optional[str]:
+    def post_release(self) -> Optional[str]:
         if self.version.post_n1 is not None:
             return self.version.post_n1
         if (
@@ -99,11 +96,11 @@ class Version:
         return f"{self.version.post_l}{self.version.post_n2}"
 
     @property
-    def developmentrelease(self) -> Optional[str]:
+    def development_release(self) -> Optional[str]:
         return f"{self.version.dev_l}{self.version.dev_n}"
 
     @property
-    def localversion(self) -> Optional[str]:
+    def local_version(self) -> Optional[str]:
         return f"{self.version.local_l}.{self.version.local_n}"
 
     def __str__(self) -> str:
@@ -142,9 +139,11 @@ class Version:
     @classmethod
     def find(
         cls,
-        max_folders_up: int = 10,
         pyproject_folder: Optional[Path] = None,
+        *,
+        max_folders_up: int = 10,
         default_version: str = "0.1.0",
+        filename: str = "pyproject.toml",
     ) -> Version:
         """
         Fetches the version number for the pyproject.toml up
@@ -152,6 +151,9 @@ class Version:
 
         Args:
             pyproject_folder (Optional[str | Path]): Set the path if known.
+            * : KW  only.
+            filename (str): String of filename to find. Defaults to
+                            "pyproject.toml"
             max_folders_up (int): Max number of folders up to search.
                                   0 is the given folder.
             default_version (str): If no version is found, what version
@@ -161,12 +163,11 @@ class Version:
             Version: Version for the project ensuring PEP440 compliance.
 
         Raises:
-            TypeError:
-            FileNotFoundError:
-            SyntaxError:
-
-        todo: finish this.
+            TypeError: Invalid type for pyproject_folder is given.
+            FileNotFoundError: File not found within given constraints.
+            SyntaxError: Version data not found in file.
         """
+
         if pyproject_folder is None:
             pyproject_folder = Path(__file__).joinpath("../").resolve()
         elif isinstance(pyproject_folder, str):
@@ -179,15 +180,18 @@ class Version:
                 f"{type(pyproject_folder)}"  # fmt: on
             )
             raise TypeError(msg)
+
         ret_release: Version = Version(default_version)
 
         for idx in range(max_folders_up + 1):
             temp_folder = pyproject_folder
-            temp_path = "../" * idx + "./pyproject.toml"
-            temp_toml: Path = temp_folder.joinpath(temp_path).resolve()
-            if temp_toml.is_file():
-                pyproject_toml = temp_toml
+            temp_folder = temp_folder.joinpath("../" * idx).resolve()
+            glob_path = temp_folder.glob("**/" + filename)
+            try:
+                pyproject_toml: Path = Path(next(glob_path))
                 break
+            except StopIteration:
+                continue
         else:
             raise FileNotFoundError("pyproject.toml not found")
 
@@ -195,9 +199,8 @@ class Version:
             for line in fin.readlines():
                 if line.startswith("version"):
                     ret_release = Version(line.split('"')[1])
+                    break
+            else:
+                raise SyntaxError("Version not stored correctly in file.")
 
-        if ret_release:
-            return ret_release
-        else:
-            msg = f"Not a valid semantic version style: {ret_release}"
-            raise SyntaxError(msg)
+        return ret_release

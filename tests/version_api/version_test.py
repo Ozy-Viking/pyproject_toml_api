@@ -4,7 +4,12 @@ from pyproject_toml_api.version_api.version import Version
 
 
 def test_version_find(testing_folder):
-    version = Version.find(0, pyproject_folder=testing_folder)
+    version = Version.find(testing_folder, max_folders_up=2)
+    assert str(version) == "0.1.3"
+
+
+def test_version_find_deep_folder_step_ups(deep_path_testing_folder):
+    version = Version.find(deep_path_testing_folder)
     assert str(version) == "0.1.3"
 
 

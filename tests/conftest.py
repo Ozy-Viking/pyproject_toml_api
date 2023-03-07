@@ -17,3 +17,8 @@ def testing_folder():
     else:
         return None
     return testing_dir
+
+
+@pytest.fixture
+def deep_path_testing_folder(testing_folder):
+    return testing_folder.joinpath("a/b/c/d/e/f")
